@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MilkmenUnion", "src\MilkmenUnion.csproj", "{064A18AF-88F7-45D5-9F50-418C6BB3C20C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milkmenunion.Tests", "Milkmenunion.Tests\Milkmenunion.Tests.csproj", "{A76E513D-B034-4569-8460-A8193CAE0AB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milkmenunion.Tests", "Milkmenunion.Tests\Milkmenunion.Tests.csproj", "{A76E513D-B034-4569-8460-A8193CAE0AB6}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "MilkmenUnion.Database", "Database1\MilkmenUnion.Database.sqlproj", "{F5756CA8-E2A9-48F2-A0FB-CD943B631E6B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,12 @@ Global
 		{A76E513D-B034-4569-8460-A8193CAE0AB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A76E513D-B034-4569-8460-A8193CAE0AB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A76E513D-B034-4569-8460-A8193CAE0AB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5756CA8-E2A9-48F2-A0FB-CD943B631E6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5756CA8-E2A9-48F2-A0FB-CD943B631E6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5756CA8-E2A9-48F2-A0FB-CD943B631E6B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{F5756CA8-E2A9-48F2-A0FB-CD943B631E6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5756CA8-E2A9-48F2-A0FB-CD943B631E6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5756CA8-E2A9-48F2-A0FB-CD943B631E6B}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -20,7 +20,7 @@ namespace MilkmenUnion.Domain
         public async Task<IReadOnlyEmployee> GetById(string id, CancellationToken cancellationToken = default) =>
             await _employeesDbContext.Employees.SingleOrDefaultAsync(e => e.Id == id, cancellationToken);
 
-        public Task<(IReadOnlyEmployee, int)> GetAllPaging(
+        public Task<(IReadOnlyEmployee[], int)> GetAllPaging(
             string filter = null,
             int? page = 1,
             int? pageSize = 10,

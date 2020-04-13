@@ -38,7 +38,7 @@ namespace Milkmenunion.Tests.Controllers
         [Fact]
         public async Task cannot_request_more_records_than_higher_limit()
         {
-            var result = await _client.GetAsync($"employee?pageSize={APILimits.MaxResultsPerCall + 1}");
+            var result = await _client.GetAsync($"employee?pageSize={ApiLimits.MaxResultsPerCall + 1}");
             result.IsSuccessStatusCode.ShouldBeFalse();
         }
     }

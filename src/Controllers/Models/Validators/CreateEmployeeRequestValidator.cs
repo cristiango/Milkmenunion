@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentValidation;
 
-namespace MilkmenUnion.Controllers
+namespace MilkmenUnion.Controllers.Models.Validators
 {
     public class CreateEmployeeRequestValidator : AbstractValidator<CreateEmployeeRequest>
     {

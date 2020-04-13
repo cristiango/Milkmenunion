@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MilkmenUnion.Controllers
+namespace MilkmenUnion.Controllers.Models
 {
     public class CreateEmployeeRequest
     {

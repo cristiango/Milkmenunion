@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using MilkmenUnion.Controllers.Models.Validators;
 using MilkmenUnion.Domain;
 using MilkmenUnion.Storage;
 
@@ -33,6 +34,9 @@ namespace MilkmenUnion
             );
 
             services.AddTransient<EmployeesRepository>();
+
+            //Validators
+            services.AddSingleton<CreateEmployeeRequestValidator>();
 
             services.AddHealthChecks();
             services.AddControllers();

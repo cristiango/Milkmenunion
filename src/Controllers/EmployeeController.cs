@@ -1,18 +1,14 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MilkmenUnion.Controllers.Models;
+using MilkmenUnion.Controllers.Models.Validators;
 using MilkmenUnion.Domain;
 
 namespace MilkmenUnion.Controllers
 {
-    public static class APILimits
-    {
-        public const int MaxResultsPerCall = 1000;
-    }
     /// <summary>
     /// This is private level API and Authentication is out of scope of this exercise
     /// </summary>
@@ -22,11 +18,13 @@ namespace MilkmenUnion.Controllers
     {
         private readonly EmployeesRepository _employeesRepository;
         private readonly GetUtcNow _getUtcNow;
+        private readonly CreateEmployeeRequestValidator _createEmployeeRequestValidator;
 
-        public EmployeeController(EmployeesRepository employeesRepository, GetUtcNow getUtcNow)
+        public EmployeeController(EmployeesRepository employeesRepository, GetUtcNow getUtcNow, CreateEmployeeRequestValidator createEmployeeRequestValidator)
         {
             _employeesRepository = employeesRepository;
             _getUtcNow = getUtcNow;
+            _createEmployeeRequestValidator = createEmployeeRequestValidator;
         }
 
         [HttpGet("")]
@@ -36,9 +34,9 @@ namespace MilkmenUnion.Controllers
             [FromQuery] int? pageSize = 10, 
             CancellationToken ct = default)
         {
-            if (pageSize > APILimits.MaxResultsPerCall)
+            if (pageSize > ApiLimits.MaxResultsPerCall)
             {
-                return new ObjectResult($"No more than {APILimits.MaxResultsPerCall} results per page")
+                return new ObjectResult($"No more than {ApiLimits.MaxResultsPerCall} results per page")
                     {StatusCode = (int) HttpStatusCode.ExpectationFailed};
             }
 
@@ -54,17 +52,13 @@ namespace MilkmenUnion.Controllers
         public async Task<IActionResult> OnboardNewEmployee([FromBody] CreateEmployeeRequest request,
             CancellationToken ct = default)
         {
-            //TODO implement validation
+            var validationResult = await _createEmployeeRequestValidator.ValidateAsync(request, ct);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
 
-            return BadRequest("reson");
+            return Created("dummy", null);
         }
-    }
-
-    public class CreateEmployeeRequest
-    {
-        public string FistName { get; set; }
-        public string LastName { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public int? Height { get; set; }
     }
 }

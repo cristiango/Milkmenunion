@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MilkmenUnion.Domain;
 
-namespace MilkmenUnion.Domain
+namespace MilkmenUnion.Storage
 {
-    public class EmployeesDbContext: DbContext
+    public class CompanyDbContext: DbContext
     {
-        public EmployeesDbContext(DbContextOptions<EmployeesDbContext> options) : base(options)
+        public CompanyDbContext(DbContextOptions<CompanyDbContext> options) : base(options)
         {
 
         }

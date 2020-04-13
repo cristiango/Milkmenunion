@@ -14,7 +14,7 @@ namespace Milkmenunion.Tests
         [Fact]
         public async Task Can_get_basic_controller()
         {
-            var result  =await _client.GetAsync("WeatherForecast");
+            var result  =await _client.GetAsync("health");
             result.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 

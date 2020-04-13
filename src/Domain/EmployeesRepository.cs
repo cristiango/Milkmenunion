@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using MilkmenUnion.Storage;
 
 namespace MilkmenUnion.Domain
 {
@@ -10,27 +11,27 @@ namespace MilkmenUnion.Domain
     /// </summary>
     public class EmployeesRepository
     {
-        private readonly EmployeesDbContext _employeesDbContext;
+        private readonly CompanyDbContext _companyDbContext;
 
-        public EmployeesRepository(EmployeesDbContext employeesDbContext)
+        public EmployeesRepository(CompanyDbContext companyDbContext)
         {
-            _employeesDbContext = employeesDbContext;
+            _companyDbContext = companyDbContext;
         }
 
         public async Task<IReadOnlyEmployee> GetById(string id, CancellationToken cancellationToken = default) =>
-            await _employeesDbContext.Employees.SingleOrDefaultAsync(e => e.Id == id, cancellationToken);
+            await _companyDbContext.Employees.SingleOrDefaultAsync(e => e.Id == id, cancellationToken);
 
         public Task<(IReadOnlyEmployee[], int)> GetAllPaging(
             string filter = null,
             int? page = 1,
             int? pageSize = 10,
             CancellationToken cancellationToken = default) =>
-            _employeesDbContext.Employees.FilterProperties(filter, page, pageSize, cancellationToken);
+            _companyDbContext.Employees.FilterProperties(filter, page, pageSize, cancellationToken);
 
         public async Task AddNew(Employee employee) => 
-            await _employeesDbContext.Employees.AddAsync(employee);
+            await _companyDbContext.Employees.AddAsync(employee);
 
         public Task CommitChanges(CancellationToken cancellationToken) => 
-            _employeesDbContext.SaveChangesAsync(cancellationToken);
+            _companyDbContext.SaveChangesAsync(cancellationToken);
     }
 }

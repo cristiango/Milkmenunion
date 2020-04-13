@@ -17,10 +17,16 @@ namespace MilkmenUnion.Domain
         public string Id { get; private set; }
         public string FistName { get; private set; }
         public string LastName { get; private set; }
+        
+        /// <summary>
+        /// Height in cm
+        /// </summary>
         public int Height { get; private set; }
         public DateTime DateOfBirth { get; private set; } //for simplicity we assume this is always present
         
         //TODO add calculated age based on UTCNow
         //Salary and history of salary changes
+
+        //TODO Add concurrency version
     }
 }

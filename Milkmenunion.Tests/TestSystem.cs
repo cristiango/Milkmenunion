@@ -4,8 +4,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MilkmenUnion;
+using MilkmenUnion.Storage;
 using Milkmenunion.Tests.Infra;
 
 namespace Milkmenunion.Tests
@@ -20,9 +23,20 @@ namespace Milkmenunion.Tests
         {
             var webHostBuilder = new WebHostBuilder()
                 .UseStartup<Startup>()
-                .ConfigureLogging(x => x.AddDebug().AddConsole());
+                .ConfigureLogging(x => x.AddDebug().AddConsole())
+                .ConfigureServices(services =>
+                    {
+                        services.AddSingleton(new DbContextOptionsBuilder<CompanyDbContext>()
+                            .UseInMemoryDatabase("InMemoryDb").Options);
+                    });
 
             _testServer = new TestServer(webHostBuilder);
+            using (var scope = _testServer.Host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<CompanyDbContext>();
+                context.SeedWithTestData();
+            }
         }
 
         public static async Task<TestSystem> Create()

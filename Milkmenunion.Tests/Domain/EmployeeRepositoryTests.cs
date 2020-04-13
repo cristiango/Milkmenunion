@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MilkmenUnion.Domain;
+using MilkmenUnion.Storage;
 using Shouldly;
 using Xunit;
 
@@ -14,11 +15,11 @@ namespace Milkmenunion.Tests.Domain
 
         public EmployeeRepositoryTests()
         {
-            var options = new DbContextOptionsBuilder<EmployeesDbContext>()
+            var options = new DbContextOptionsBuilder<CompanyDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
 
-            var employeeDbContext = new EmployeesDbContext(options);
+            var employeeDbContext = new CompanyDbContext(options);
             _employeesRepository = new EmployeesRepository(employeeDbContext);
         }
 

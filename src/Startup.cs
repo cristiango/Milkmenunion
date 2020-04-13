@@ -1,15 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using MilkmenUnion.Domain;
+using MilkmenUnion.Storage;
 
 namespace MilkmenUnion
 {
@@ -25,6 +25,15 @@ namespace MilkmenUnion
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<GetUtcNow>(SystemClock.Default);
+            services.AddDbContext<CompanyDbContext>();
+            services.TryAddSingleton(provider =>
+                new DbContextOptionsBuilder<CompanyDbContext>()
+                    .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")).Options
+            );
+
+            services.AddTransient<EmployeesRepository>();
+
             services.AddHealthChecks();
             services.AddControllers();
         }
@@ -47,6 +56,14 @@ namespace MilkmenUnion
             {
                 endpoints.MapControllers();
             });
+        }
+    }
+
+    public class DbInitializer
+    {
+        public static async Task Initialize(CompanyDbContext context, CancellationToken ct = default)
+        {
+            await context.Database.EnsureCreatedAsync(ct);
         }
     }
 }

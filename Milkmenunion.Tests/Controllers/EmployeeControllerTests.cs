@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using MilkmenUnion.Controllers;
 using MilkmenUnion.Controllers.Models;
 using Shouldly;
 using Xunit;
@@ -32,6 +33,13 @@ namespace Milkmenunion.Tests.Controllers
         {
             var getResult = await _client.GetMessage<GetAllEmployeesResult>("employee");
             getResult.Total.ShouldBe(The.AllEmployees.Count());
+        }
+
+        [Fact]
+        public async Task cannot_request_more_records_than_higher_limit()
+        {
+            var result = await _client.GetAsync($"employee?pageSize={APILimits.MaxResultsPerCall + 1}");
+            result.IsSuccessStatusCode.ShouldBeFalse();
         }
     }
 }

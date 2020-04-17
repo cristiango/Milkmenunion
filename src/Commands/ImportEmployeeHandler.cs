@@ -80,6 +80,8 @@ namespace MilkmenUnion.Commands
                 .WithLastName(command.LastName)
                 .WithHeightInMeters(command.HeightInMeters);
 
+            //TODO salary has to be calculated based on a secret formula that only SQL sever knows how to do it
+
             await _employeesRepository.AddNew(employee);
             await _employeesRepository.CommitChanges(cancellationToken);
 

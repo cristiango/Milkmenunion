@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using MilkmenUnion.Controllers.Models.Validators;
 using MilkmenUnion.Domain;
@@ -27,11 +26,18 @@ namespace MilkmenUnion
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<GetUtcNow>(SystemClock.Default);
-            services.AddDbContext<CompanyDbContext>();
-            services.TryAddSingleton(provider =>
-                new DbContextOptionsBuilder<CompanyDbContext>()
-                    .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")).Options
-            );
+            services.AddDbContext<CompanyDbContext>(options =>
+                {
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                });
+            
+            //Not enough time to tend to integration tests. Disable this bit in order to use `dotnet-ef migrations add InitialCreate --project .\src\MilkmenUnion.csproj`
+            //For future developer use a separated SqlCompanyDbContext that should be used only when adding new ef migrations
+
+            //services.TryAddSingleton(provider =>
+            //    new DbContextOptionsBuilder<CompanyDbContext>()
+            //        .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")).Options
+            //);
 
             services.AddTransient<EmployeesRepository>();
 
@@ -63,11 +69,29 @@ namespace MilkmenUnion
         }
     }
 
+    /// <summary>
+    /// Ideally this should run as part of bootstrapping the application.
+    /// Consider some kind of pipeline where we return 503(or a `degraded` state) until we initialize our dependencies. Ok 503 is not ideal in AWS/Azure but you get the gist
+    /// </summary>
     public class DbInitializer
     {
-        public static async Task Initialize(CompanyDbContext context, CancellationToken ct = default)
+        public static async Task Initialize(CompanyDbContext dbContext, CancellationToken ct = default)
         {
-            await context.Database.EnsureCreatedAsync(ct);
+            //apply possible migrations also
+            await dbContext.Database.EnsureCreatedAsync(ct);
+
+            var pendingMigrations =
+                (await dbContext.Database.GetPendingMigrationsAsync(CancellationToken.None)).ToArray();
+
+            var appliedMigrations = await dbContext.Database.GetAppliedMigrationsAsync(CancellationToken.None);
+            appliedMigrations.ForEach(migration =>
+                _logger.LogInformation("{migration} migration already applied", migration));
+
+            pendingMigrations.ForEach(migration => _logger.LogInformation("{migration} pending", migration));
+
+            await dbContext.Database.MigrateAsync();
+
+            pendingMigrations.ForEach(migration => _logger.LogInformation("{migration} applied", migration));
         }
     }
 }

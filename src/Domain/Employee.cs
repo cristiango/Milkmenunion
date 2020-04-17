@@ -28,5 +28,36 @@ namespace MilkmenUnion.Domain
         //Salary and history of salary changes
 
         //TODO Add concurrency version
+
+        /// <summary>
+        /// Not a real immutable implementation here. Lets assume we implement clone later on
+        /// </summary>
+        public Employee WithEstimatedBirthDate(DateTime estimatedDateOfBirth)
+        {
+            this.DateOfBirth = estimatedDateOfBirth;
+            this.DateOfBirthEstimated = true;
+            return this;
+        }
+
+
+        public bool DateOfBirthEstimated { get; set; }
+
+        public Employee WithFirstName(string firstName)
+        {
+            this.LastName = LastName;
+            return this;
+        }
+
+        public Employee WithLastName(string lastName)
+        {
+            this.LastName = lastName;
+            return this;
+        }
+
+        public Employee WithHeightInMeters(in double heightInMeters)
+        {
+            this.Height = (int)heightInMeters * 100;
+            return this;
+        }
     }
 }

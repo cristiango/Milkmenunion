@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MilkmenUnion.Controllers
+namespace MilkmenUnion.Import
 {
     public class DataLoadResult
     {

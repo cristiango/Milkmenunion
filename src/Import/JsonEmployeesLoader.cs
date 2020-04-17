@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MilkmenUnion.Controllers
+namespace MilkmenUnion.Import
 {
     public class JsonEmployeesLoader
     {

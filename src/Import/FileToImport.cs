@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace MilkmenUnion.Controllers
+namespace MilkmenUnion.Import
 {
     public class FileToImport
     {

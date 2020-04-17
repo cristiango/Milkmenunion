@@ -18,7 +18,7 @@ namespace MilkmenUnion.Domain
             _companyDbContext = companyDbContext;
         }
 
-        public async Task<IReadOnlyEmployee> GetById(string id, CancellationToken cancellationToken = default) =>
+        public async Task<Employee> GetById(string id, CancellationToken cancellationToken = default) =>
             await _companyDbContext.Employees.SingleOrDefaultAsync(e => e.Id == id, cancellationToken);
 
         public Task<(IReadOnlyEmployee[], int)> GetAllPaging(
@@ -27,6 +27,7 @@ namespace MilkmenUnion.Domain
             int? pageSize = 10,
             CancellationToken cancellationToken = default) =>
             _companyDbContext.Employees.FilterProperties(filter, page, pageSize, cancellationToken);
+
 
         public async Task AddNew(Employee employee) => 
             await _companyDbContext.Employees.AddAsync(employee);

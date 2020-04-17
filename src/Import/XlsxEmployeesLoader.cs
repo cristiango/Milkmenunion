@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MilkmenUnion.Controllers
+namespace MilkmenUnion.Import
 {
     /// <summary>
     /// Disclaimer: due to time constraints we choose to ignore possible big files and memory issues.

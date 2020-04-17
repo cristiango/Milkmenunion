@@ -52,6 +52,8 @@ namespace MilkmenUnion.Controllers
         public async Task<IActionResult> OnboardNewEmployee([FromBody] CreateEmployeeRequest request,
             CancellationToken ct = default)
         {
+            //do not use here ImportEmployeeHandler. That is meant only for importing.
+            //For this API we should create another CreateEmployeeHandler that will have different rules perhaps
             var validationResult = await _createEmployeeRequestValidator.ValidateAsync(request, ct);
             if (!validationResult.IsValid)
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MilkmenUnion.Domain
 {
@@ -25,7 +26,7 @@ namespace MilkmenUnion.Domain
         public DateTime DateOfBirth { get; private set; } //for simplicity we assume this is always present
         
         //TODO add calculated age based on UTCNow
-        //Salary and history of salary changes
+        //MonthlyAmount and history of salary changes
 
         //TODO Add concurrency version
 
@@ -58,6 +59,39 @@ namespace MilkmenUnion.Domain
         {
             this.Height = (int)heightInMeters * 100;
             return this;
+        }
+
+        public IReadOnlyCollection<SalaryInformation> SalaryHistory { get; }
+
+        //see how we can get this computed
+        public double CurrentSalary { get; private set; }
+    }
+
+    /// <summary>
+    /// We want to extend this later with some kind of audit. We want to know the person who approved this salary change at least
+    /// </summary>
+    public class SalaryInformation
+    {
+        /// <summary>
+        /// WE assume that everyone gets the same number of payments per year.
+        /// </summary>
+        public double MonthlyAmount { get; private set; }
+        public DateTime ChangeDate { get; private set; }
+
+        public Employee Employee { get; private set; }
+        public string EmployeeId { get; private set; }
+
+        public int Id { get; private set; }
+
+
+        public static SalaryInformation AdjustSalaryFor(Employee employee,double newMonthlySalary, DateTime changeDate)
+        {
+            return new SalaryInformation
+            {
+                Employee = employee,
+                MonthlyAmount = newMonthlySalary,
+                ChangeDate = changeDate
+            };
         }
     }
 }

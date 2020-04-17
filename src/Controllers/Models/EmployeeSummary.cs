@@ -10,7 +10,7 @@ namespace MilkmenUnion.Controllers.Models
         public int Height { get; set; }
         public DateTime DateOfBirth { get; set; }
         public int Age { get; set; }
-        //Salary information or maybe with different API
+        //MonthlyAmount information or maybe with different API
         public static EmployeeSummary Load(IReadOnlyEmployee employee, GetUtcNow nowUtc)
         {
             return new EmployeeSummary()

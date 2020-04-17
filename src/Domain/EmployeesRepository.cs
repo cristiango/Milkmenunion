@@ -19,7 +19,10 @@ namespace MilkmenUnion.Domain
         }
 
         public async Task<Employee> GetById(string id, CancellationToken cancellationToken = default) =>
-            await _companyDbContext.Employees.SingleOrDefaultAsync(e => e.Id == id, cancellationToken);
+            await _companyDbContext
+                .Employees
+                .Include(x=>x.SalaryHistory)
+                .SingleOrDefaultAsync(e => e.Id == id, cancellationToken);
 
         public Task<(IReadOnlyEmployee[], int)> GetAllPaging(
             string filter = null,

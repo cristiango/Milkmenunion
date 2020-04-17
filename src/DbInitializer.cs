@@ -20,24 +20,27 @@ namespace MilkmenUnion
         {
             _logger = logger;
             _dbContext = dbContext;
+            
         }
         public async Task Initialize(CancellationToken ct = default)
         {
-            //apply possible migrations also
-            await _dbContext.Database.EnsureCreatedAsync(ct);
-
-            var pendingMigrations =
-                (await _dbContext.Database.GetPendingMigrationsAsync(CancellationToken.None)).ToArray();
-
             var appliedMigrations = await _dbContext.Database.GetAppliedMigrationsAsync(CancellationToken.None);
             appliedMigrations.ForEach(migration =>
                 _logger.LogInformation("{migration} migration already applied", migration));
 
+            var pendingMigrations =
+                (await _dbContext.Database.GetPendingMigrationsAsync(CancellationToken.None)).ToArray();
             pendingMigrations.ForEach(migration => _logger.LogInformation("{migration} pending", migration));
 
             await _dbContext.Database.MigrateAsync(cancellationToken: ct);
 
             pendingMigrations.ForEach(migration => _logger.LogInformation("{migration} applied", migration));
+        }
+
+        public async Task Drop(CancellationToken ct = default)
+        {
+            _logger.LogWarning("Dropping database. I hope this is not production env");
+            await _dbContext.Database.EnsureDeletedAsync(ct);
         }
     }
 }

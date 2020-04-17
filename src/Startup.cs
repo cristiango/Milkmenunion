@@ -1,6 +1,4 @@
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +24,7 @@ namespace MilkmenUnion
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<GetUtcNow>(SystemClock.Default);
+            services.AddTransient<DbInitializer>();
             services.AddDbContext<CompanyDbContext>(options =>
                 {
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
@@ -66,32 +65,6 @@ namespace MilkmenUnion
             {
                 endpoints.MapControllers();
             });
-        }
-    }
-
-    /// <summary>
-    /// Ideally this should run as part of bootstrapping the application.
-    /// Consider some kind of pipeline where we return 503(or a `degraded` state) until we initialize our dependencies. Ok 503 is not ideal in AWS/Azure but you get the gist
-    /// </summary>
-    public class DbInitializer
-    {
-        public static async Task Initialize(CompanyDbContext dbContext, CancellationToken ct = default)
-        {
-            //apply possible migrations also
-            await dbContext.Database.EnsureCreatedAsync(ct);
-
-            var pendingMigrations =
-                (await dbContext.Database.GetPendingMigrationsAsync(CancellationToken.None)).ToArray();
-
-            var appliedMigrations = await dbContext.Database.GetAppliedMigrationsAsync(CancellationToken.None);
-            appliedMigrations.ForEach(migration =>
-                _logger.LogInformation("{migration} migration already applied", migration));
-
-            pendingMigrations.ForEach(migration => _logger.LogInformation("{migration} pending", migration));
-
-            await dbContext.Database.MigrateAsync();
-
-            pendingMigrations.ForEach(migration => _logger.LogInformation("{migration} applied", migration));
         }
     }
 }

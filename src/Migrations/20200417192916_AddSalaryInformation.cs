@@ -7,12 +7,6 @@ namespace MilkmenUnion.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<double>(
-                name: "CurrentSalary",
-                table: "Employees",
-                nullable: false,
-                defaultValue: 0.0);
-
             migrationBuilder.CreateTable(
                 name: "Salaries",
                 columns: table => new

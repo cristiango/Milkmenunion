@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace MilkmenUnion.Domain
 {
@@ -40,8 +42,8 @@ namespace MilkmenUnion.Domain
             return this;
         }
 
-
-        public bool DateOfBirthEstimated { get; set; }
+        public bool NeedsInitialSalaryCalculation { get; private set; }
+        public bool DateOfBirthEstimated { get; private set; }
 
         public Employee WithFirstName(string firstName)
         {
@@ -63,8 +65,11 @@ namespace MilkmenUnion.Domain
 
         public IReadOnlyCollection<SalaryInformation> SalaryHistory { get; }
 
-        //see how we can get this computed
-        public double CurrentSalary { get; private set; }
+        public double? CurrentSalary() =>
+            SalaryHistory
+                .OrderByDescending(x => x.ChangeDate)
+                .FirstOrDefault()
+                ?.MonthlyAmount;
     }
 
     /// <summary>

@@ -37,5 +37,11 @@ namespace MilkmenUnion.Domain
 
         public Task CommitChanges(CancellationToken cancellationToken) => 
             _companyDbContext.SaveChangesAsync(cancellationToken);
+
+        /// <summary>
+        /// Updates the salaries with secret formula for all imported employees
+        /// </summary>
+        public Task CalculateInitialSalaryForImportedEmployees(CancellationToken ct = default) =>
+            _companyDbContext.Database.ExecuteSqlRawAsync("sp_aproximateSalary", ct);
     }
 }

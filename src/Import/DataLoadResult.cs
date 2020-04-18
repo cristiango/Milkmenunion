@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MilkmenUnion.Commands;
 
 namespace MilkmenUnion.Import
 {
@@ -7,11 +8,13 @@ namespace MilkmenUnion.Import
     {
         public IReadOnlyList<Issue> Issues { get; }
         public int LoadedEmployees { get; }
+        public IReadOnlyCollection<ImportEmployee> Commands { get; }
 
-        public DataLoadResult(IReadOnlyList<Issue> issues, int loadedEmployees)
+        public DataLoadResult(IReadOnlyList<Issue> issues, int loadedEmployees, IReadOnlyCollection<ImportEmployee> commands)
         {
             Issues = issues?? Array.Empty<Issue>();
             LoadedEmployees = loadedEmployees;
+            Commands = commands;
         }
 
         public override string ToString()

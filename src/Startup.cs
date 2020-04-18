@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MilkmenUnion.Controllers.Models.Validators;
 using MilkmenUnion.Domain;
+using MilkmenUnion.Import;
 using MilkmenUnion.Storage;
 
 namespace MilkmenUnion
@@ -37,7 +38,7 @@ namespace MilkmenUnion
             //    new DbContextOptionsBuilder<CompanyDbContext>()
             //        .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")).Options
             //);
-
+            services.AddTransient<FileImporter>();
             services.AddTransient<EmployeesRepository>();
 
             //Validators
